@@ -82,12 +82,13 @@ Accessibility once on their next update, then it's stable again.
 must stay without it — hardened runtime turns on library validation, and Xcode's
 `Tinycast Dev.debug.dylib` is refused at launch because a self-signed identity carries no Team ID for
 the loader to match. The flag is not part of the designated requirement, so turning it on costs no
-Accessibility grant. Two exceptions in `Tinycast/Tinycast.entitlements` earn their place:
+Accessibility grant. Three entitlements in `Tinycast/Tinycast.entitlements` earn their place:
 
 | Entitlement | Without it |
 | --- | --- |
 | `com.apple.security.cs.allow-jit` | JavaScriptCore cannot JIT, and every extension command runs on the interpreter |
 | `com.apple.security.automation.apple-events` | Every Apple event is refused with `-1743` and no prompt — Get Info, the Finder selection an extension reads, and the System Events–driven system actions all die silently |
+| `com.apple.security.personal-information.calendars` | EventKit cannot access calendar data, and macOS cannot grant Calendar access |
 
 Nothing else is needed: the only `dlopen` is Apple's own IOBluetooth, so library validation is left
 on, and `node`, `ray` and shell commands are separate processes it never reaches.

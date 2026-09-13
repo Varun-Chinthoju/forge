@@ -24,6 +24,17 @@ codesign --verify --deep --strict "$APP" || fail "$NAME.app: the seal does not v
 ENTITLEMENTS="$(codesign -d --entitlements - "$APP" 2>/dev/null)"
 [[ "$ENTITLEMENTS" == *get-task-allow* ]] && fail "$NAME.app: get-task-allow is present"
 
+SIGNED_ENTITLEMENTS="$(mktemp "${TMPDIR:-/tmp}/tinycast-entitlements.XXXXXX")"
+trap 'rm -f "$SIGNED_ENTITLEMENTS"' EXIT
+if ! codesign -d --xml --entitlements - "$APP" >"$SIGNED_ENTITLEMENTS" 2>/dev/null; then
+    fail "$NAME.app: could not read signed entitlements"
+elif [[ "$(/usr/libexec/PlistBuddy \
+    -c 'Print :com.apple.security.personal-information.calendars' \
+    "$SIGNED_ENTITLEMENTS" 2>/dev/null || true)" != "true" ]]
+then
+    fail "$NAME.app: Calendar entitlement is missing or not true"
+fi
+
 if [ "$STATUS" -eq 0 ]; then
     echo "✓ $NAME.app is notarizable"
 fi
