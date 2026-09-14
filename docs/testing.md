@@ -5,19 +5,20 @@ is a set of standalone harnesses, and the manual half is the sweep at the bottom
 
 ## Definition of done
 
-The mechanical bar, in one place so it cannot drift. All five pass before a change is finished.
+The mechanical bar, in one place so it cannot drift. All listed checks pass before a change is finished.
 
 | Check | Command |
 | --- | --- |
 | The harnesses | `./Scripts/run-tests.sh` |
 | Lint | `./Scripts/lint.sh` |
 | Pure-layer purity | `grep -rln 'import AppKit\|import SwiftUI\|import Cocoa' Tinycast/Features/*/Model/` |
-| A clean build | `xcodebuild … -configuration Debug CODE_SIGNING_ALLOWED=NO`, zero **new** warnings |
+| Unsigned Debug app compile | `xcodebuild … -scheme Tinycast -configuration Debug CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO` |
+| Unsigned Release app compile | `xcodebuild … -scheme Tinycast -configuration Release CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO` |
+| Unsigned universal Release app compile | `xcodebuild … -scheme Tinycast -configuration Release ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO` |
 | Docs still true | any doc your change made wrong, fixed in the same commit |
 
-CI runs the first two and does not build the app at all — so the build, the purity grep and the docs
-are on you. Each is expanded below; the manual sweep at the end of this file is the sixth, judged by
-what you touched.
+CI runs the harnesses, lint, and all three unsigned app compile checks. The purity grep, docs and
+manual sweep remain on you. Each is expanded below, and the manual sweep is judged by what you touched.
 
 ## The harnesses
 
@@ -161,14 +162,17 @@ when touching a pure file:
 
 ## Build and size checks
 
-A clean build is part of the bar; CI does not build the app, so this is on you.
+A clean build is part of the bar, and CI runs the three unsigned app compile checks above.
 
 ```sh
 xcodegen generate                 # only after editing project.yml
 xcodebuild build -project Tinycast.xcodeproj -scheme Tinycast -configuration Debug \
-  CODE_SIGNING_ALLOWED=NO
+  CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
 xcodebuild build -project Tinycast.xcodeproj -scheme Tinycast -configuration Release \
-  CODE_SIGNING_ALLOWED=NO
+  CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
+xcodebuild build -project Tinycast.xcodeproj -scheme Tinycast -configuration Release \
+  ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO \
+  CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO
 find ~/Library/Developer/Xcode/DerivedData -name "Tinycast*.app" -maxdepth 6 -print -quit
 ```
 

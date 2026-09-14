@@ -1,9 +1,8 @@
 name: CI
 
-# The job is a merge gate. There is no xcodebuild step: the full Debug build costs minutes and the
-# release workflow already builds before it ships, so CI keeps to the two checks that finish in about
-# a minute. Both go through the scripts rather than naming rules or harnesses here, so this file
-# cannot drift from them. See docs/testing.md.
+# The test job runs the harnesses and lint; app-build is the application compile gate for Debug, Release
+# and universal Release configurations. The build job uses the committed Xcode project directly, while
+# the existing checks still go through their scripts. See docs/testing.md.
 #
 # PRs only, deliberately. `pull_request` builds the *merge result*, so a push to `main` that came from
 # a green PR would re-test content CI has already seen. Use "Run workflow" for a direct push to main.
@@ -48,3 +47,58 @@ jobs:
         run: |
           command -v swiftlint >/dev/null || brew install swiftlint
           ./Scripts/lint.sh
+
+  app-build:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Select Xcode 26
+        run: |
+          XCODE_PATH="$(ls -d /Applications/Xcode_26*.app 2>/dev/null | sort -V | tail -n1)"
+          if [ -z "$XCODE_PATH" ]; then
+            echo "::error::No Xcode 26.x found on this runner. Installed Xcodes:"
+            ls /Applications | grep -i xcode || true
+            exit 1
+          fi
+          echo "Using $XCODE_PATH"
+          echo "DEVELOPER_DIR=$XCODE_PATH/Contents/Developer" >> "$GITHUB_ENV"
+
+      - name: Build unsigned Debug app
+        run: |
+          xcodebuild -project Tinycast.xcodeproj -scheme Tinycast -configuration Debug \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData/Debug" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            build
+
+      - name: Build unsigned Release app
+        run: |
+          xcodebuild -project Tinycast.xcodeproj -scheme Tinycast -configuration Release \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData/Release" \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            build
+
+      - name: Build unsigned universal Release app
+        run: |
+          xcodebuild -project Tinycast.xcodeproj -scheme Tinycast -configuration Release \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData/Universal" \
+            ARCHS="arm64 x86_64" ONLY_ACTIVE_ARCH=NO \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO \
+            build
+
+      - name: Verify universal app binaries
+        run: |
+          APP="$RUNNER_TEMP/DerivedData/Universal/Build/Products/Release/Tinycast.app"
+          for BIN in "$APP/Contents/MacOS/Tinycast" "$APP/Contents/Helpers/ClipboardTextHelper"; do
+            SLICES="$(lipo -archs "$BIN")"
+            echo "${BIN##*/}: arch=$SLICES"
+            for ARCH in arm64 x86_64; do
+              case " $SLICES " in
+                *" $ARCH "*) ;;
+                *)
+                  echo "::error::${BIN##*/}: no $ARCH slice — this is not a universal build"
+                  exit 1
+                  ;;
+              esac
+            done
+          done
