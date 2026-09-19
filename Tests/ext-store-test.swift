@@ -131,7 +131,7 @@ struct ExtensionStoreTests {
         let url = ExtensionStoreResponse.searchURL(query: "co ffee", page: 2)?.absoluteString ?? ""
         check("the query is escaped", url.contains("q=co%20ffee"))
         check("the page is passed", url.contains("page=2"))
-        // Tinycast is macOS-only; a windows-only extension is noise.
+        // Forge is macOS-only; a windows-only extension is noise.
         check("macOS is requested", url.contains("platform=macos"))
     }
 

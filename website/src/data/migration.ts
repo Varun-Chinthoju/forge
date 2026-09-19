@@ -5,7 +5,7 @@
 export const migration = {
   title: "Bring your setup with you.",
   intro:
-    "Tinycast reads a Raycast export directly. Point it at your .rayconfig file, type the passphrase, and your shortcuts come with you.",
+    "Forge reads a Raycast export directly. Point it at your .rayconfig file, type the passphrase, and your shortcuts come with you.",
   steps: [
     {
       title: "Export what you have",

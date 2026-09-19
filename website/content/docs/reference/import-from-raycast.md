@@ -3,8 +3,8 @@ title: Import from Raycast
 description: Read a Raycast export and bring your shortcuts, favorites, snippets, quicklinks and history across.
 ---
 
-Tinycast reads Raycast's own export file directly, in **Settings → Backup → Raycast Export**, or in
-the welcome screen the first time you open Tinycast.
+Forge reads Raycast's own export file directly, in **Settings → Backup → Raycast Export**, or in
+the welcome screen the first time you open Forge.
 
 It reads the `.rayconfig` file that current Raycast versions export. Older Raycast 1.x exports are no
 longer supported.
@@ -12,10 +12,10 @@ longer supported.
 ## Steps
 
 1. In Raycast, export your settings and data, and note the passphrase.
-2. In Tinycast, go to **Settings → Backup → Raycast Export** and choose the file.
+2. In Forge, go to **Settings → Backup → Raycast Export** and choose the file.
 3. Type the passphrase, tick the things you want, and import.
 
-Tinycast recognizes the file **before** you type the passphrase, so a wrong passphrase is reported as
+Forge recognizes the file **before** you type the passphrase, so a wrong passphrase is reported as
 a wrong passphrase, not as "this is not a Raycast file".
 
 ## About that passphrase
@@ -26,7 +26,7 @@ your login Keychain.
 You can see it in **Raycast → Settings → Extensions → Export Settings & Data**, or in Keychain Access
 under the service `Raycast` and account `export_passphrase`.
 
-**Tinycast never reads your Keychain.** You paste the passphrase in yourself.
+**Forge never reads your Keychain.** You paste the passphrase in yourself.
 
 ## What comes across
 
@@ -38,15 +38,15 @@ under the service `Raycast` and account `export_passphrase`.
 | Clipboard history   | Text, and images whose files still exist                   |
 | Snippets            | Name, text and keyword                                     |
 | Quicklinks          | Name, link and the app it opens with                       |
-| Emoji skin tone     | Raycast's default becomes Tinycast's Default               |
+| Emoji skin tone     | Raycast's default becomes Forge's Default               |
 | Compact mode        | From Raycast's window mode                                 |
-| Pop to root         | Only when the timing matches one Tinycast offers           |
+| Pop to root         | Only when the timing matches one Forge offers           |
 | Launch at login     |                                                            |
 | Menu bar visibility | From Raycast's menu bar icon setting                       |
 
 The list of apps kept out of clipboard history comes across with Clipboard history.
 
-A shortcut with a modifier Tinycast does not recognize is **skipped whole**, rather than imported as
+A shortcut with a modifier Forge does not recognize is **skipped whole**, rather than imported as
 something slightly different from what you had.
 
 ## Clipboard history
@@ -89,5 +89,5 @@ Two things are not in a `.rayconfig`, so they have their own importers:
 
 There is a **Quit Raycast** button in the pane, for when you are ready.
 
-Nothing in Tinycast needs Raycast to be installed, except importing extensions from it, which by
+Nothing in Forge needs Raycast to be installed, except importing extensions from it, which by
 definition reads its folder.

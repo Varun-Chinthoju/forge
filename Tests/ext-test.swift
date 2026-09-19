@@ -105,10 +105,10 @@ struct ExtensionTests {
     static func runtimeURL() -> URL {
         let candidates = [
             URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
-                .appendingPathComponent("Tinycast/Resources/RaycastRuntime.generated.js"),
+                .appendingPathComponent("Forge/Resources/RaycastRuntime.generated.js"),
             URL(fileURLWithPath: #filePath)
                 .deletingLastPathComponent().deletingLastPathComponent()
-                .appendingPathComponent("Tinycast/Resources/RaycastRuntime.generated.js")
+                .appendingPathComponent("Forge/Resources/RaycastRuntime.generated.js")
         ]
         return candidates.first { FileManager.default.fileExists(atPath: $0.path) } ?? candidates[0]
     }
@@ -268,7 +268,7 @@ struct ExtensionTests {
         check("dropdown options", prefs["mode"]?.options.count == 2)
         check("dropdown default", prefs["mode"]?.effectiveDefault == .string("b"))
 
-        // A manifest with no commands isn't an extension Tinycast can run.
+        // A manifest with no commands isn't an extension Forge can run.
         check("rejects a manifest with no commands", ExtensionManifest(json: ["name": "x"]) == nil)
         check(
             "rejects a Windows-only manifest",
@@ -624,7 +624,7 @@ struct ExtensionTests {
             ExtensionOAuthSession.handleCallbackURL(nonOAuthURL) == .ignored)
 
         // A callback with nothing waiting for it is reported, not silently dropped.
-        let strayURL = URL(string: "tinycast://oauth?code=abc&state=xyz")!
+        let strayURL = URL(string: "forge://oauth?code=abc&state=xyz")!
         check(
             "handleCallbackURL reports an expired callback",
             ExtensionOAuthSession.handleCallbackURL(strayURL) == .expired)
@@ -681,7 +681,7 @@ struct ExtensionTests {
                 try { callback(); return "none"; } catch (error) { return error.code; }
               };
               const filePaths = [
-                fileURLToPath("file:///Applications/Tinycast%20Beta.app"),
+                fileURLToPath("file:///Applications/Forge%20Beta.app"),
                 fileURLToPath(pathToFileURL("/tmp/a#b.png")),
                 pathToFileURL("/tmp/My Image.png").href,
                 errorCode(() => fileURLToPath("file:///tmp/a%2Fb")),
@@ -749,7 +749,7 @@ struct ExtensionTests {
             "fileURLToPath decodes a path and rejects an unusable URL",
             ExtensionAccessoriesView_labelForTest(
                 screen.items.first?.node.array("accessories").dropFirst(2).first)
-                == "/Applications/Tinycast Beta.app\n/tmp/a#b.png\n"
+                == "/Applications/Forge Beta.app\n/tmp/a#b.png\n"
                 + "file:///tmp/My%20Image.png\n"
                 + "ERR_INVALID_FILE_URL_PATH\nERR_INVALID_FILE_URL_HOST\n"
                 + "ERR_INVALID_URL_SCHEME",
@@ -1023,7 +1023,7 @@ struct ExtensionTests {
     @MainActor
     static func nodeContractChecks() async {
         let directory = FileManager.default.temporaryDirectory
-            .appendingPathComponent("tinycast-archive-\(UUID().uuidString)")
+            .appendingPathComponent("forge-archive-\(UUID().uuidString)")
         try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
         defer { try? FileManager.default.removeItem(at: directory) }
         let (runtime, host, recorder) = makeRuntime()
@@ -1174,7 +1174,7 @@ struct ExtensionTests {
     @MainActor
     static func swiftHelperChecks() async {
         let helper = FileManager.default.temporaryDirectory
-            .appendingPathComponent("tinycast-helper-\(UUID().uuidString)")
+            .appendingPathComponent("forge-helper-\(UUID().uuidString)")
         try? Data("#!/bin/sh\necho '{\"hex\":\"#FF0000\"}'\n".utf8).write(to: helper)
         defer { try? FileManager.default.removeItem(at: helper) }
 
@@ -1218,7 +1218,7 @@ struct ExtensionTests {
 
     /// `zlib` is the one node shim with no JS-side implementation to lean on.
     static func zlibChecks() {
-        let payload = Data(String(repeating: "tinycast extensions ", count: 64).utf8)
+        let payload = Data(String(repeating: "forge extensions ", count: 64).utf8)
         do {
             check("gzip round-trips", try Zlib.gunzip(Zlib.gzip(payload)) == payload)
             check("zlib round-trips", try Zlib.inflate(Zlib.deflate(payload)) == payload)

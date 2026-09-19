@@ -195,7 +195,7 @@ export default function Command() {
     Buffer.from("hello").toString("base64"),
     Buffer.from("aGVsbG8=", "base64").toString("utf8"),
     new TextDecoder().decode(new TextEncoder().encode("héllo")),
-    fileURLToPath("file:///Applications/Tinycast%20Beta.app"),
+    fileURLToPath("file:///Applications/Forge%20Beta.app"),
     fileURLToPath(new URL("file:///tmp/%ED%95%9C%EA%B8%80.txt")),
     fileURLToPath("file://localhost/tmp/a?query=ignored#fragment"),
     fileURLToPath("file:///tmp/a%5Cb"),
@@ -221,7 +221,7 @@ export default function Command() {
     pathToFileURL("/tmp/a#b.png").href,
     fileURLToPath(pathToFileURL("/tmp/a#b.png")),
     fileURLToPath(pathToFileURL("/tmp/a?b.png")),
-    fileURLToPath(pathToFileURL("/Applications/Tinycast Beta.app")),
+    fileURLToPath(pathToFileURL("/Applications/Forge Beta.app")),
     errorCode(() => fileURLToPath("file:///tmp/a%2Fb")),
     errorCode(() => fileURLToPath("file://a%2Fb/tmp/a")),
     errorCode(() => fileURLToPath("file://example.com/tmp/a")),
@@ -330,7 +330,7 @@ import { Readable, Transform, Writable } from "node:stream";
 import { pipeline } from "node:stream/promises";
 
 export default async function Command() {
-  const target = join(tmpdir(), "tinycast-fixture-index.json");
+  const target = join(tmpdir(), "forge-fixture-index.json");
   const response = await fetch("https://example.test/index.json");
   if (!response.ok || !response.body) throw new Error(\`HTTP \${response.status}: \${response.statusText}\`);
 
@@ -564,7 +564,7 @@ export async function runFixtures() {
       "aGVsbG8=",
       "hello",
       "héllo",
-      "/Applications/Tinycast Beta.app",
+      "/Applications/Forge Beta.app",
       "/tmp/한글.txt",
       "/tmp/a",
       "/tmp/a\\b",
@@ -584,7 +584,7 @@ export async function runFixtures() {
       "file:///tmp/a%23b.png",
       "/tmp/a#b.png",
       "/tmp/a?b.png",
-      "/Applications/Tinycast Beta.app",
+      "/Applications/Forge Beta.app",
       "ERR_INVALID_FILE_URL_PATH",
       "ERR_INVALID_URL",
       "ERR_INVALID_FILE_URL_HOST",

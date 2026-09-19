@@ -1,5 +1,5 @@
 // The hero's recreated palette. Labels copy the real app's strings (the action
-// bar, section titles, placeholders), and every row names Tinycast's own
+// bar, section titles, placeholders), and every row names Forge's own
 // things or generic apps, so nothing here pretends to be someone's data.
 
 export type DemoRowIcon = "ghost" | "github" | "link" | "text" | "image";
@@ -82,19 +82,19 @@ export const demoScenes: DemoScene[] = [
     body: "rows",
     rows: [
       {
-        title: "github.com/abue-ammar/tinycast",
+        title: "github.com/Varun-Chinthoju/forge",
         kind: "Link",
         icon: "link",
         tint: "rgb(255 255 255 / 0.1)",
       },
       {
-        title: "brew install --cask tinycast",
+        title: "brew install --cask forge",
         kind: "Text",
         icon: "text",
         tint: "rgb(255 255 255 / 0.1)",
       },
       {
-        title: "tinycast-launcher.png",
+        title: "forge-launcher.png",
         kind: "Image",
         icon: "image",
         tint: "linear-gradient(135deg, #863bff, #47bfff)",

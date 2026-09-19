@@ -303,7 +303,7 @@ setting (`AppSettings.openOnCursorScreen`, on by default):
 **Neither case may use `NSScreen.main`**, which is documented as the screen of the window with keyboard
 focus — the frontmost app's, wherever the user last clicked. It therefore follows the user across
 displays, which is the wrong answer for both settings and made the off case do exactly what turning it
-off was meant to stop ([#270](https://github.com/abue-ammar/tinycast/issues/270)). The menu-bar display
+off was meant to stop ([#270](https://github.com/Varun-Chinthoju/forge/issues/270)). The menu-bar display
 is the one whose `frame.origin` is `.zero`, which is what `primary` looks for.
 
 The cursor hit test is `NSMouseInRect(mouse, screen.frame, false)`, **not** `CGRect.contains`. A mouse
@@ -312,7 +312,7 @@ rows land in the half-open interval `(minY, maxY]`: the topmost row is exactly `
 excludes, while that same value is the `minY` of the display stacked above. `contains` would therefore
 hand a pointer parked at the top of one display to its neighbour. `NSMouseInRect` exists for this.
 
-## The placeholder is Tinycast's, not the field's
+## The placeholder is Forge's, not the field's
 
 The search field is a SwiftUI `TextField` with **no `prompt`**; `RootPaletteView` draws the
 placeholder itself as a leading-aligned background `Text`.

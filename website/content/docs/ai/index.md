@@ -83,18 +83,18 @@ Runs **on your Mac**. No key, no account, and nothing leaves the machine. When y
 it is the default.
 
 It reads and writes text only, with no web search and no attachments. If Apple Intelligence is
-switched off in System Settings, Tinycast tells you so. **It never quietly moves you to a paid API
+switched off in System Settings, Forge tells you so. **It never quietly moves you to a paid API
 instead.**
 
 ### Installed AI: Codex, Claude and OpenCode
 
-If you already use the `codex`, `claude` or `opencode` command-line tools, Tinycast can use them
-with the account you are signed in to. **Tinycast never asks for or stores their keys.**
+If you already use the `codex`, `claude` or `opencode` command-line tools, Forge can use them
+with the account you are signed in to. **Forge never asks for or stores their keys.**
 
 Each one has its own switch, and all three ship off. The pane shows whether each is ready, missing,
 or needs you to sign in. It links to the install page and can copy the sign-in command for you.
 
-Tinycast uses them as plain chat. Their tools, file access and shell access are switched off, and
+Forge uses them as plain chat. Their tools, file access and shell access are switched off, and
 any saved session is deleted after each reply.
 
 ### API connections
@@ -106,8 +106,8 @@ any **OpenAI Compatible** endpoint, including a local one like Ollama.
 - Remote endpoints must use HTTPS. Plain HTTP works only for `localhost`, `127.0.0.1` and `::1`,
   where a key is optional.
 - A key belongs to the address it was saved for. Point a connection at a different base URL and
-  Tinycast asks for a new key rather than sending the old one somewhere new.
-- While you edit a connection, Tinycast asks the provider which models your key can use, and you
+  Forge asks for a new key rather than sending the old one somewhere new.
+- While you edit a connection, Forge asks the provider which models your key can use, and you
   search that list as you type. If a gateway cannot list models, type the model ID by hand.
 
 For a gateway that copies DeepSeek's API, the reasoning effort menu offers **None**, which turns
@@ -132,7 +132,7 @@ Press <kbd>⌘</kbd><kbd>V</kbd> in the message box to attach what is on your cl
 Each attachment shows as a small pill beside what you type, with its own ✕. After two pills the rest
 fold into a `+N` count. <kbd>delete</kbd> in an empty message box removes the last one.
 
-Not every model can take every kind. Tinycast refuses at the moment you attach, and says why, rather
+Not every model can take every kind. Forge refuses at the moment you attach, and says why, rather
 than sending something the model will never see.
 
 | Route                               | Images               | PDFs | Text files |
@@ -148,7 +148,7 @@ Only files on your Mac are read. A copied web address is never downloaded.
 
 ## System prompt
 
-Tinycast sends a short note ahead of every conversation that tells the model where it is running.
+Forge sends a short note ahead of every conversation that tells the model where it is running.
 The **System prompt** box adds your own instructions after it.
 
 **Send a system prompt** (on by default) controls both. Turn it off and no instructions are sent at
@@ -164,7 +164,7 @@ With an API connection, the model can call tools from MCP servers you add. See
 
 ## Privacy and storage
 
-- Conversations are saved on your Mac in `ai-chats.sqlite3`, in Tinycast's Application Support
+- Conversations are saved on your Mac in `ai-chats.sqlite3`, in Forge's Application Support
   folder.
 - **Keep conversations** decides how long: **7 Days**, **30 Days**, **3 Months** or **Forever**
   (default). Old chats are only removed while AI is on, so a Mac with AI switched off keeps them.

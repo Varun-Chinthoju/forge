@@ -1,7 +1,8 @@
 # Third-party notices
 
-Tinycast is licensed under the GNU Affero General Public License v3 — see [LICENSE](LICENSE). It
-also redistributes the third-party material recorded below, under the terms stated for each.
+Forge is a modified fork of Tinycast, licensed under the GNU Affero General Public License v3 — see
+[LICENSE](LICENSE). The original copyright and third-party notices remain, and Forge also
+redistributes the material recorded below under the terms stated for each.
 
 ## Brand marks — `Tinycast/Assets.xcassets/AIBrand*.imageset`
 

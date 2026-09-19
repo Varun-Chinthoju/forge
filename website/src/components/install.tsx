@@ -60,7 +60,7 @@ export function Install() {
       index={6}
       label="Install"
       title="One command, and you're running."
-      intro="Homebrew clears the macOS quarantine flag for you, so Tinycast opens without a warning. After that, it updates itself."
+      intro="Homebrew clears the macOS quarantine flag for you, so Forge opens without a warning. After that, it updates itself."
     >
       <div
         className="inline-flex rounded-full bg-tint/5 p-1"
@@ -101,7 +101,7 @@ export function Install() {
         </summary>
         <div className="mt-3 pl-6 text-small text-fg-muted">
           <p className="max-w-xl">
-            Tinycast is self-signed, so macOS quarantines a copy downloaded by
+            Forge is self-signed, so macOS quarantines a copy downloaded by
             hand. Grab it from{" "}
             <a
               href={`${site.repo}/releases`}

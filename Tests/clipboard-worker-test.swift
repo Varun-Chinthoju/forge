@@ -12,8 +12,8 @@ struct ClipboardWorkerTests {
         let executable = directory.appendingPathComponent("ClipboardTextHelper")
         try compile(
             [
-                "Tinycast/Features/Clipboard/Service/ClipboardTextExtractor.swift",
-                "Tinycast/Features/Clipboard/Service/ClipboardTextHelper.swift"
+                "Forge/Features/Clipboard/Service/ClipboardTextExtractor.swift",
+                "Forge/Features/Clipboard/Service/ClipboardTextHelper.swift"
             ], to: executable)
         let source = directory.appendingPathComponent("receipt.png")
         let context = CGContext(

@@ -17,9 +17,9 @@ import * as fs from "node:fs";
 import * as zlib from "node:zlib";
 
 const runtimePath = [
-  resolve("Tinycast/Resources/RaycastRuntime.generated.js"),
-  resolve("../../Tinycast/Resources/RaycastRuntime.generated.js"),
-  fileURLToPath(new URL("../../Tinycast/Resources/RaycastRuntime.generated.js", import.meta.url)),
+  resolve("Forge/Resources/RaycastRuntime.generated.js"),
+  resolve("../../Forge/Resources/RaycastRuntime.generated.js"),
+  fileURLToPath(new URL("../../Forge/Resources/RaycastRuntime.generated.js", import.meta.url)),
 ].find(existsSync);
 
 const runtime = readFileSync(runtimePath, "utf8");

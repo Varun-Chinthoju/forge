@@ -27,7 +27,7 @@ jobs:
               "",
               "A few things worth knowing up front:",
               "",
-              "**Tinycast is not a Raycast clone.** It has already borrowed what it wanted from Raycast, and",
+              "**Forge is not a Raycast clone.** It has already borrowed what it wanted from Raycast, and",
               "the borrowing is done. Small conveniences are usually closed without much discussion.",
               "Something genuinely necessary is still considered on its merits.",
               "",
@@ -87,7 +87,7 @@ jobs:
             const body = [
               "Closing this automatically — it doesn't link an approved issue.",
               "",
-              "Tinycast requires the bug or feature to be agreed before code is written, so effort isn't",
+              "Forge requires the bug or feature to be agreed before code is written, so effort isn't",
               "wasted on something that won't be merged. See",
               "[CONTRIBUTING.md](https://github.com/" + context.repo.owner + "/" + context.repo.repo +
                 "/blob/main/CONTRIBUTING.md).",

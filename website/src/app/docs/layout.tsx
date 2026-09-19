@@ -2,7 +2,7 @@ import { DocsLayout } from "fumadocs-ui/layouts/docs";
 import { Heart } from "lucide-react";
 import type { ReactNode } from "react";
 import { DocsProvider } from "../../components/docs-provider";
-import { DiscordLogo, GitHubLogo, Logo } from "../../components/ui/icon";
+import { GitHubLogo, Logo } from "../../components/ui/icon";
 import { site } from "../../data/site";
 import { source } from "../../lib/source";
 
@@ -16,8 +16,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         // collapses that margin so the sidebar sits against the edge.
         containerProps={{ style: { "--fd-layout-width": "100%" } as never }}
         // `type: "icon"` is what places these in the sidebar's bottom bar
-        // beside the theme switch. Passing `githubUrl` instead would put
-        // GitHub there but leave Discord with nowhere to go.
+        // beside the theme switch.
         links={[
           // A button, not an icon: a 16pt glyph would hide it beside GitHub and Discord.
           {
@@ -37,14 +36,6 @@ export default function Layout({ children }: { children: ReactNode }) {
             label: "GitHub repository",
             url: site.repo,
             icon: <GitHubLogo size={16} />,
-            external: true,
-          },
-          {
-            type: "icon",
-            text: "Discord",
-            label: "Join the Discord",
-            url: site.community.discord,
-            icon: <DiscordLogo size={16} />,
             external: true,
           },
         ]}

@@ -1,5 +1,5 @@
-blank_issues_enabled: false
+blank_issues_enabled: true
 contact_links:
-  - name: Discord
-    url: https://discord.gg/v2Eeb4QQy3
-    about: Questions, ideas, and general chat.
+  - name: Forge Issues
+    url: https://github.com/Varun-Chinthoju/forge/issues
+    about: Questions, ideas, and general feedback.

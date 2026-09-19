@@ -30,8 +30,7 @@ const linkGroups: { title: string; links: FooterLink[] }[] = [
     title: "Community",
     links: [
       { label: "GitHub", href: site.repo },
-      { label: "Discord", href: site.community.discord },
-      { label: "Support Tinycast", href: site.support },
+      { label: "Support Forge", href: site.support },
     ],
   },
 ];

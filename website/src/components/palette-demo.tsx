@@ -278,7 +278,7 @@ export function PaletteDemo() {
   return (
     <div ref={rootRef}>
       <p className="sr-only">
-        A recreation of the Tinycast palette, cycling through opening an app,
+        A recreation of the Forge palette, cycling through opening an app,
         converting units, pasting from clipboard history and finding an emoji.
       </p>
       <div className="relative">

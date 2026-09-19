@@ -2,10 +2,10 @@ import { createMDX } from "fumadocs-mdx/next";
 
 const withMDX = createMDX();
 
-// The site lives at abue-ammar.github.io/tinycast, not at a domain root.
+// The site lives at varun-chinthoju.github.io/forge, not at a domain root.
 // Exported to the client too, because `basePath` only auto-prefixes next/link
 // and next/image — a raw URL handed to the lightbox has to prefix itself.
-const basePath = "/tinycast";
+const basePath = "/forge";
 
 /** @type {import('next').NextConfig} */
 const config = {

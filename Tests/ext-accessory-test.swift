@@ -151,7 +151,7 @@ struct ExtensionSearchAccessoryTests {
 
     static func storageIsolation() {
         let directory = FileManager.default.temporaryDirectory
-            .appendingPathComponent("tinycast-ext-accessory-\(UUID().uuidString)")
+            .appendingPathComponent("forge-ext-accessory-\(UUID().uuidString)")
         defer { try? FileManager.default.removeItem(at: directory) }
         let storage = ExtensionStorage(directory: directory)
         storage.setLocalStorage(extension: "sample", key: "filter", value: .string("extension-data"))

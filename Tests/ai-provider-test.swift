@@ -345,7 +345,7 @@ struct AIProviderTests {
         for (provider, endpoint) in expected {
             let query = try? AIModelDiscovery.query(
                 provider: provider, baseURL: URL(string: provider.defaultBaseURL)!,
-                apiKey: "secret", appTitle: "Tinycast")
+                apiKey: "secret", appTitle: "Forge")
             expect(
                 query?.request.url?.absoluteString == endpoint,
                 "\(provider.title) resolves its model catalog endpoint")
@@ -353,28 +353,28 @@ struct AIProviderTests {
 
         let anthropic = try? AIModelDiscovery.query(
             provider: .anthropic, baseURL: URL(string: "https://api.anthropic.com")!,
-            apiKey: "secret", appTitle: "Tinycast"
+            apiKey: "secret", appTitle: "Forge"
         ).request
         expect(
             anthropic?.value(forHTTPHeaderField: "x-api-key") == "secret",
             "Anthropic model discovery uses x-api-key authentication")
         let gemini = try? AIModelDiscovery.query(
             provider: .gemini, baseURL: URL(string: AIProviderKind.gemini.defaultBaseURL)!,
-            apiKey: "secret", appTitle: "Tinycast"
+            apiKey: "secret", appTitle: "Forge"
         ).request
         expect(
             gemini?.value(forHTTPHeaderField: "x-goog-api-key") == "secret",
             "Gemini model discovery uses native API-key authentication")
         let openAI = try? AIModelDiscovery.query(
             provider: .openAI, baseURL: URL(string: AIProviderKind.openAI.defaultBaseURL)!,
-            apiKey: "secret", appTitle: "Tinycast"
+            apiKey: "secret", appTitle: "Forge"
         ).request
         expect(
             openAI?.value(forHTTPHeaderField: "Authorization") == "Bearer secret",
             "OpenAI-compatible discovery uses bearer authentication")
         let local = try? AIModelDiscovery.query(
             provider: .openAICompatible, baseURL: URL(string: "http://localhost:11434/")!,
-            apiKey: "", appTitle: "Tinycast"
+            apiKey: "", appTitle: "Forge"
         ).request
         expect(
             local?.url?.absoluteString == "http://localhost:11434/models",

@@ -1,6 +1,6 @@
 # Raycast import
 
-Tinycast reads the `.rayconfig` written by Raycast 2.x: a `RAYCFG3` container holding an AES-256-GCM
+Forge reads the `.rayconfig` written by Raycast 2.x: a `RAYCFG3` container holding an AES-256-GCM
 payload under a scrypt-derived key. It is the only format read — the 1.x export and the Raycast X beta
 between them are both gone, deleted rather than carried.
 
@@ -35,7 +35,7 @@ and a `quicklinks` object holding `quicklinks` plus `openWithPlatforms`.
 
 Raycast encrypts even when the user never chose a password — it generates one and stores it in the
 login keychain (service `Raycast`, account `export_passphrase`), viewable at Raycast → Settings →
-Extensions → Export Settings & Data. **Tinycast never reads the keychain**; the user supplies the
+Extensions → Export Settings & Data. **Forge never reads the keychain**; the user supplies the
 passphrase.
 
 ## Mapping
@@ -59,7 +59,7 @@ have their own importer, described in
 ## Layout
 
 `RaycastDecoder` unwraps the container and returns Raycast's own values; `RaycastImportReader` turns
-those into Tinycast's domain types. That is the same pure-layer / platform-layer split
+those into Forge's domain types. That is the same pure-layer / platform-layer split
 `Features/WindowManagement/` uses — the reader needs AppKit, so it lives in `Service/` and is covered by
 the app build rather than the harness.
 

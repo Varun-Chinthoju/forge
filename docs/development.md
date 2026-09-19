@@ -14,7 +14,7 @@ verifying a change is [testing.md](testing.md).
 
 ## First-time setup
 
-Create the `Tinycast Self-Signed` code-signing identity once — builds sign with it, which is what keeps
+Create the `Forge Self-Signed` code-signing identity once — builds sign with it, which is what keeps
 macOS from forgetting the Accessibility grant on every rebuild. Follow **[signing.md](signing.md) §1**,
 a few `openssl`/`security` commands.
 
@@ -24,20 +24,20 @@ the section below is a note for anyone who wants it, not a step.
 ## Build & run
 
 ```sh
-open Tinycast.xcodeproj    # then ⌘R
+open Forge.xcodeproj    # then ⌘R
 ```
 
 Or from the command line:
 
 ```sh
-xcodebuild -project Tinycast.xcodeproj -scheme Tinycast -configuration Debug build
+xcodebuild -project Forge.xcodeproj -scheme Forge -configuration Debug build
 ```
 
 `xcodebuild` uses whatever `xcode-select` points at; if that's the Command Line Tools rather than
 Xcode, prefix with `DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer` (the SwiftUI
 `@State`/`@FocusState` macros need Xcode's macOS platform).
 
-`Tinycast.xcodeproj` is committed and generated from `project.yml` via XcodeGen — after changing
+`Forge.xcodeproj` is committed and generated from `project.yml` via XcodeGen — after changing
 project settings in `project.yml`, run `xcodegen generate` and commit the result. There is no
 `Package.swift`, and `Bundle.module` must never be used.
 
@@ -47,7 +47,7 @@ executable name stays fixed even when release builds override the app's product 
 
 ### The dev channel
 
-Debug builds are a separate channel: **`Tinycast Dev.app`**, bundle id `com.tinycast.app.dev`. Every
+Debug builds are a separate channel: **`Forge Dev.app`**, bundle id `com.varun.forge.app.dev`. Every
 persisted thing is keyed by bundle id — `~/Library/Preferences/<id>.plist` (settings and hotkey
 bindings), `~/Library/Application Support/<id>/` (the onboarding marker, Notes, snippets, quicklinks,
 clipboard history, calculator history, launch ranking and frequent emoji),
@@ -63,7 +63,7 @@ Consequences worth knowing:
 
 - The dev build asks for Accessibility on its own the first time, and starts with **no** hotkeys bound
   and onboarding unseen. Grant and bind once; it persists across rebuilds, because the fixed build path
-  and the `Tinycast Self-Signed` identity keep the TCC grant alive.
+  and the `Forge Self-Signed` identity keep the TCC grant alive.
 - Don't bind the same global hotkey in both — whichever registered first wins.
 - The Hyper Key's Caps Lock remap is `hidutil` state, which is **system-wide, not per-bundle**: quitting
   one build clears the remap for the other, which then needs a rebind or a relaunch to restore it.
@@ -79,14 +79,14 @@ and the flag database:
 
 ```sh
 brew install xcode-build-server
-xcodebuild -project Tinycast.xcodeproj -scheme Tinycast -configuration Debug \
-    -derivedDataPath build/DerivedData build 2>&1 | tee /tmp/tinycast-build.log
-./Scripts/sync-lsp.sh /tmp/tinycast-build.log
+xcodebuild -project Forge.xcodeproj -scheme Forge -configuration Debug \
+    -derivedDataPath build/DerivedData build 2>&1 | tee /tmp/forge-build.log
+./Scripts/sync-lsp.sh /tmp/forge-build.log
 ```
 
 Both files are git-ignored because they embed absolute paths, and `sourcekit-lsp` looks for
 `buildServer.json` at the workspace root by name, so it cannot live in a subfolder. After this the
-**Build Tinycast.app (debug)** task (⌘⇧B) and **F5** re-run the script on every build, so new and
+**Build Forge.app (debug)** task (⌘⇧B) and **F5** re-run the script on every build, so new and
 renamed files keep resolving.
 
 **Do not run `xcode-build-server config`.** It writes `kind: xcode`, and in that mode the server ignores
@@ -136,7 +136,7 @@ The comment policy in [standards.md](standards.md#comments) is deliberately not 
 ## Formatting
 
 ```sh
-./Scripts/format.sh            # format Tinycast/ and Tests/ in place
+./Scripts/format.sh            # format Forge/ and Tests/ in place
 ./Scripts/format.sh --check    # report what would change, write nothing (exit 1 if any)
 ```
 
@@ -172,8 +172,8 @@ Two Swift files are emitted by scripts and must never be hand-edited. Both downl
 run them online, then commit the result:
 
 ```sh
-node Scripts/gen-emoji.js            # -> Tinycast/Features/Emoji/Model/EmojiData.generated.swift
-node Scripts/gen-currencies.js       # -> Tinycast/Features/Calculator/Model/CurrencyData.generated.swift
+node Scripts/gen-emoji.js            # -> Forge/Features/Emoji/Model/EmojiData.generated.swift
+node Scripts/gen-currencies.js       # -> Forge/Features/Calculator/Model/CurrencyData.generated.swift
 ```
 
 `gen-currencies.js` joins three sources on the ISO code: the **fiat rate feed**'s own quote list — the

@@ -43,13 +43,13 @@ struct AIInstructionsTest {
 
         check(
             "the preamble names the app so the model can answer for it",
-            AIPreamble.text.contains("Tinycast"))
+            AIPreamble.text.contains("Forge"))
         check(
             "the preamble tells the model to be honest in comparisons",
             AIPreamble.text.lowercased().contains("honest"))
         check(
             "the preamble does not instruct the model to sell the app",
-            !AIPreamble.text.lowercased().contains("prefer tinycast"))
+            !AIPreamble.text.lowercased().contains("prefer forge"))
 
         check(
             "the preamble refuses to guess another launcher's numbers",

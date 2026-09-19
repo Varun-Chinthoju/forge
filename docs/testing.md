@@ -1,6 +1,6 @@
 # Testing and verification
 
-How to check that a change holds up. Tinycast has no XCTest target and no UI tests: the automated half
+How to check that a change holds up. Forge has no XCTest target and no UI tests: the automated half
 is a set of standalone harnesses, and the manual half is the sweep at the bottom of this file.
 
 ## Definition of done
@@ -11,7 +11,7 @@ The mechanical bar, in one place so it cannot drift. All five pass before a chan
 | --- | --- |
 | The harnesses | `./Scripts/run-tests.sh` |
 | Lint | `./Scripts/lint.sh` |
-| Pure-layer purity | `grep -rln 'import AppKit\|import SwiftUI\|import Cocoa' Tinycast/Features/*/Model/` |
+| Pure-layer purity | `grep -rln 'import AppKit\|import SwiftUI\|import Cocoa' Forge/Features/*/Model/` |
 | A clean build | `xcodebuild … -configuration Debug CODE_SIGNING_ALLOWED=NO`, zero **new** warnings |
 | Docs still true | any doc your change made wrong, fixed in the same commit |
 
@@ -27,7 +27,7 @@ what you touched.
 ```
 
 The suite runs in parallel, `hw.ncpu` harnesses at a time, which is what takes it from about 140
-seconds to about 15. `TINYCAST_TEST_JOBS=1` forces it back to one at a time. Parallelism is safe
+seconds to about 15. `FORGE_TEST_JOBS=1` forces it back to one at a time. Parallelism is safe
 because each harness already roots its scratch state somewhere of its own — a UUID-suffixed
 `temporaryDirectory`, a `UserDefaults(suiteName:)`, or `NSPasteboard.withUniqueName()` — and a new
 harness must keep doing that rather than reach for a fixed path.
@@ -53,7 +53,7 @@ assertion, and it is the more important one.
 
 A harness also runs in your own login session against the real system, with no sandbox and no fixture
 world, so it must never mutate state the machine shares with the apps you use. `NSPasteboard.general`
-is the trap: a running Tinycast records every write to it as a genuine copy, so a fixture left there
+is the trap: a running Forge records every write to it as a genuine copy, so a fixture left there
 lands in clipboard history looking like something the user copied. `notes-editor-test` seeded one on
 every run from #232 onward by calling the native `copy:`/`cut:`/`paste:` actions; it now drives the
 `writeSelection(to:types:)` and `readSelection(from:)` primitives those actions delegate to, against
@@ -145,7 +145,7 @@ same commit with the reason in the message.
 The layering rule reduces to one grep, and it must return nothing:
 
 ```sh
-grep -rln 'import AppKit\|import SwiftUI\|import Cocoa' Tinycast/Features/*/Model/
+grep -rln 'import AppKit\|import SwiftUI\|import Cocoa' Forge/Features/*/Model/
 ```
 
 Beyond the imports, the injected-environment half is not mechanically checkable, so it is worth an eye
@@ -165,11 +165,11 @@ A clean build is part of the bar; CI does not build the app, so this is on you.
 
 ```sh
 xcodegen generate                 # only after editing project.yml
-xcodebuild build -project Tinycast.xcodeproj -scheme Tinycast -configuration Debug \
+xcodebuild build -project Forge.xcodeproj -scheme Forge -configuration Debug \
   CODE_SIGNING_ALLOWED=NO
-xcodebuild build -project Tinycast.xcodeproj -scheme Tinycast -configuration Release \
+xcodebuild build -project Forge.xcodeproj -scheme Forge -configuration Release \
   CODE_SIGNING_ALLOWED=NO
-find ~/Library/Developer/Xcode/DerivedData -name "Tinycast*.app" -maxdepth 6 -print -quit
+find ~/Library/Developer/Xcode/DerivedData -name "Forge*.app" -maxdepth 6 -print -quit
 ```
 
 - Zero **new** warnings. Pre-existing ones are not your problem; new ones are.
@@ -196,7 +196,7 @@ search result that navigates and then sits there.
 
 ## Performance measurement
 
-`Platform/Signposts.swift` emits eight intervals on the `com.tinycast.perf` subsystem: `AppCore.start`,
+`Platform/Signposts.swift` emits eight intervals on the `com.forge.perf` subsystem: `AppCore.start`,
 `AppIndex.scan`, `AppIndex.rank`, `PaletteWindowController.show`, `UninstallScanner.discover` and
 `UninstallScanner.measure`, `FileSearchService.search`, and `Notes.search`. Open the Time Profiler or
 `os_signpost` instrument in Instruments and filter to that subsystem; nothing needs recompiling.
@@ -208,10 +208,10 @@ file resolves. Keep the entry's source list matching the command beside it.
 Run the real Spotlight-backed file-search benchmark separately from the deterministic harnesses:
 
 ```sh
-swiftc -O -swift-version 6 Tinycast/Platform/Signposts.swift \
-    Tinycast/Features/Launcher/Model/SearchRelevance.swift \
-    Tinycast/Features/FileSearch/Model/*.swift \
-    Tinycast/Features/FileSearch/Service/FileSearchService.swift \
+swiftc -O -swift-version 6 Forge/Platform/Signposts.swift \
+    Forge/Features/Launcher/Model/SearchRelevance.swift \
+    Forge/Features/FileSearch/Model/*.swift \
+    Forge/Features/FileSearch/Service/FileSearchService.swift \
     Tests/file-search-performance.swift -o /tmp/file-search-performance
 /tmp/file-search-performance
 ```
@@ -223,7 +223,7 @@ The calculator benchmark is deterministic — an injected clock, calendar and ra
 timing harness rather than an assertion one, and stays out of `run-tests.sh` for that reason:
 
 ```sh
-swiftc -O -swift-version 6 Tinycast/Features/Calculator/Model/*.swift \
+swiftc -O -swift-version 6 Forge/Features/Calculator/Model/*.swift \
     Tests/calc-performance.swift -o /tmp/calc-performance
 /tmp/calc-performance          # µs per query, by grammar
 /tmp/calc-performance --probe  # every answer as JSON, to diff two builds
@@ -241,9 +241,9 @@ the attachment path against the bounded reader it now delegates to. Compare thre
 per build with identical `-O` settings:
 
 ```sh
-swiftc -O -swift-version 6 Tinycast/Platform/PasteboardFiles.swift \
-    Tinycast/Features/Clipboard/Model/{ClipboardStore,ClipboardFilter,ColorValue,ColorFormat,ColorSpaces}.swift \
-    Tinycast/Features/Clipboard/Service/ClipboardManager.swift \
+swiftc -O -swift-version 6 Forge/Platform/PasteboardFiles.swift \
+    Forge/Features/Clipboard/Model/{ClipboardStore,ClipboardFilter,ColorValue,ColorFormat,ColorSpaces}.swift \
+    Forge/Features/Clipboard/Service/ClipboardManager.swift \
     Tests/clipboard-file-performance.swift -o /tmp/clipboard-file-performance
 /tmp/clipboard-file-performance
 ```
@@ -282,7 +282,7 @@ There is no UI test suite, so this is it. Run the core sweep for any change that
 run the scoped section for whatever feature you touched. Budget about five minutes plus three per
 section.
 
-Run against the **Debug channel** (`Tinycast Dev.app`, `com.tinycast.app.dev`). It has its own prefs,
+Run against the **Debug channel** (`Forge Dev.app`, `com.varun.forge.app.dev`). It has its own prefs,
 caches, TCC grants and login item, so this cannot disturb an installed copy.
 
 ### Core
@@ -315,7 +315,7 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
 - While a menu is open, typing does **not** change the query and the caret is hidden
 - Tab toggles launcher ↔ clipboard; bare Backspace on an empty query backs out of a sub-screen
 - Launching an app focuses it; escaping the palette returns focus to the app you came from
-- Paste from clipboard history lands in that app, not in Tinycast
+- Paste from clipboard history lands in that app, not in Forge
 - No flash, flicker or reflow on open, and row metrics unchanged
 
 ### Clipboard
@@ -324,7 +324,7 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
 - Search is correct both under and over three characters
 - ⌘. pins and the highlight follows the row into Pinned; ⌘⌫ deletes; ⌘↵ copies without pasting
 - ⌃X deletes the selected entry and ⌃⇧X clears the history, from the list and from an open ⌘K menu
-- ⌃⇧X asks first, through Tinycast's own dialog; Cancel and Esc both leave every entry in place
+- ⌃⇧X asks first, through Forge's own dialog; Cancel and Esc both leave every entry in place
 - ↵ pastes into the previous app; ⌥↵ pastes without closing the palette
 - A copy from an excluded app (Settings ▸ Clipboard ▸ Disabled Applications) is **not** recorded
 - Password-manager copies are still not recorded
@@ -404,7 +404,7 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
   autosave — in the browse list; naming it replaces that, and clearing the name brings it back
 - Inline rename updates the Markdown filename without changing source, and starts from that filename
   even where the row shows a derived title; collisions receive a suffix
-- Delete confirms through Tinycast, moves the file to Trash, and selecting another note never loses an
+- Delete confirms through Forge, moves the file to Trash, and selecting another note never loses an
   unsaved edit
 - An existing `Floating Note.md` appears as an ordinary note without conversion
 - Markdown source remains completely literal: markers stay visible, links are not activated, and task
@@ -421,7 +421,7 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
 - Dragging the title bar moves the window and dragging an edge resizes it; both survive relaunch
 - Clicking another app leaves the panel visible; Escape, Command-W, and the red light hide it
 - Command-Q does nothing anywhere; with Settings in front, Command-W closes Settings
-- Hiding restores the previous external app or Tinycast window
+- Hiding restores the previous external app or Forge window
 - Open Notes Folder opens Finder with the active Markdown file selected, or the folder with no note
 - Deleting every note closes the browse list and leaves one clean empty state with no character count;
   Command-N from there creates and selects one note
@@ -462,7 +462,7 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
 - Adding or deleting an event in Calendar.app updates an open palette without a reopen
 - A meeting with no link is listed and searchable, and answers Open in Calendar rather than Join
 - Import a backup taken with Calendar on: it comes back **off**, and no calendar toggle travels
-- Calendar in Menu Bar on Disabled: the calendar item is gone and Tinycast's own item is unaffected;
+- Calendar in Menu Bar on Disabled: the calendar item is gone and Forge's own item is unaffected;
   turning `Show in menu bar` off leaves an enabled calendar item in place, and both off leaves neither
 - On Meeting Title with Show Upcoming Events at 5 minutes, the title and countdown appear at T-5 and
   step on the minute boundary, not on a keystroke
@@ -508,12 +508,12 @@ caches, TCC grants and login item, so this cannot disturb an installed copy.
 
 - Every pane renders and the sidebar switches without flicker
 - A feature switch takes effect in the launcher immediately; every setting survives relaunch
-- Export produces a `.tinycast`; import applies it and reports a per-category summary
+- Export produces a `.forge`; import applies it and reports a per-category summary
 - Untick a category on export, and the import picker greys that row out rather than offering it
 - Untick a category on **import** and confirm it did not arrive, while the ticked ones did
 - An image clip round-trips and still renders; the archive can then be deleted without breaking it
 - A file whose `manifest.json` `format` was hand-edited is refused **with a message naming it**
-- Cancelling the save panel leaves nothing in `~/Library/Caches/com.tinycast.app.dev/backup-staging/`
+- Cancelling the save panel leaves nothing in `~/Library/Caches/com.varun.forge.app.dev/backup-staging/`
 - **`snippetsEnabled` is not in the exported file**, and importing does not enable snippets
 - Nothing in the extracted tree names a Keychain item, an extension, or an AI conversation
 
@@ -523,10 +523,10 @@ The realistic storage failure is a store that crashes on an absent file rather t
 Wipe the Dev channel and check that path directly:
 
 ```sh
-rm -rf ~/Library/Caches/com.tinycast.app.dev
-rm -rf "$HOME/Library/Application Support/com.tinycast.app.dev"
-defaults delete com.tinycast.app.dev 2>/dev/null || true
-tccutil reset Accessibility com.tinycast.app.dev 2>/dev/null || true
+rm -rf ~/Library/Caches/com.varun.forge.app.dev
+rm -rf "$HOME/Library/Application Support/com.varun.forge.app.dev"
+defaults delete com.varun.forge.app.dev 2>/dev/null || true
+tccutil reset Accessibility com.varun.forge.app.dev 2>/dev/null || true
 ```
 
 - Launches with every store directory absent — no crash, no hang; onboarding runs
@@ -536,5 +536,5 @@ tccutil reset Accessibility com.tinycast.app.dev 2>/dev/null || true
 - **Every setting shows its intended default.** Walk the panes: this is what catches a broken
   absence-versus-`false` read
 - Quit and relaunch: everything created above persisted
-- Nothing was written outside `com.tinycast.app.dev/`. Channel isolation is not negotiable — a Dev build
+- Nothing was written outside `com.varun.forge.app.dev/`. Channel isolation is not negotiable — a Dev build
   writing into the stable app's directory is a defect even though the data is disposable

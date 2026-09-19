@@ -15,13 +15,13 @@ const geistMono = Geist_Mono({
 });
 
 const description =
-  "Tinycast is a tiny, fully native macOS launcher: fuzzy app search, an inline calculator, clipboard history, snippets, notes, window management and global hotkeys, with no Electron, no account and no telemetry.";
+  "Forge is a tiny, fully native macOS launcher: fuzzy app search, an inline calculator, clipboard history, snippets, notes, window management and global hotkeys, with no Electron, no account and no telemetry.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
   title: {
-    default: "Tinycast — a tiny, native macOS launcher",
-    template: "%s — Tinycast",
+    default: "Forge — a tiny, native macOS launcher",
+    template: "%s — Forge",
   },
   description,
   applicationName: site.name,
@@ -31,20 +31,20 @@ export const metadata: Metadata = {
     siteName: site.name,
     url: site.url,
     locale: "en_US",
-    title: "Tinycast — a tiny, native macOS launcher",
+    title: "Forge — a tiny, native macOS launcher",
     description,
     images: [
       {
         url: "/og.png",
         width: 1200,
         height: 630,
-        alt: "The Tinycast command palette open over a macOS desktop, showing fuzzy app search.",
+        alt: "The Forge command palette open over a macOS desktop, showing fuzzy app search.",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Tinycast — a tiny, native macOS launcher",
+    title: "Forge — a tiny, native macOS launcher",
     description,
     images: ["/og.png"],
   },

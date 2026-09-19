@@ -535,7 +535,7 @@ struct WindowLayoutTests {
     // MARK: - Store
 
     static func withStore(_ body: (WindowLayoutStore) -> Void) {
-        let name = "tinycast-window-layout-test-\(UUID().uuidString)"
+        let name = "forge-window-layout-test-\(UUID().uuidString)"
         guard let defaults = UserDefaults(suiteName: name) else {
             expect(false, "a scratch defaults suite opens")
             return
@@ -638,7 +638,7 @@ struct WindowLayoutTests {
     }
 
     static func storePersistence() {
-        let name = "tinycast-window-layout-test-\(UUID().uuidString)"
+        let name = "forge-window-layout-test-\(UUID().uuidString)"
         guard let defaults = UserDefaults(suiteName: name) else {
             return expect(false, "a scratch defaults suite opens")
         }

@@ -1,7 +1,7 @@
 import { BookOpen } from "lucide-react";
 import { nav, site } from "../data/site";
 import { Button } from "./ui/button";
-import { DiscordLogo, GitHubLogo, Logo } from "./ui/icon";
+import { GitHubLogo, Logo } from "./ui/icon";
 import { Link } from "./ui/link";
 
 const iconButtonClass =
@@ -53,16 +53,6 @@ export function Nav() {
             className={iconButtonClass}
           >
             <GitHubLogo size={16} />
-          </a>
-          <a
-            href={site.community.discord}
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Join the Discord"
-            title="Join the Discord"
-            className={iconButtonClass}
-          >
-            <DiscordLogo size={16} />
           </a>
           <Button href="/#install" className="ml-2 h-8 px-4">
             Download

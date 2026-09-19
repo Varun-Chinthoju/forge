@@ -1,6 +1,6 @@
 # Signing
 
-Tinycast is signed with a **stable self-signed identity** called `Tinycast Self-Signed`. Keeping the
+Forge is signed with a **stable self-signed identity** called `Forge Self-Signed`. Keeping the
 _same_ identity on every build is what makes macOS remember the Accessibility permission across
 rebuilds and updates — ad-hoc signing changes every build and macOS forgets the grant.
 
@@ -12,7 +12,7 @@ You create this identity **once**. The same identity is used for:
 - **local dev builds** — so Accessibility persists while you develop (the Xcode project signs with it), and
 - **CI releases** — exported into two GitHub secrets the release workflow imports.
 
-## 1. Create the `Tinycast Self-Signed` identity (once)
+## 1. Create the `Forge Self-Signed` identity (once)
 
 Run these in a terminal. They generate a self-signed code-signing certificate and import it into your
 login keychain:
@@ -21,18 +21,18 @@ login keychain:
 # Generate a self-signed code-signing cert (10-year, codeSigning use).
 openssl req -x509 -newkey rsa:2048 -nodes -days 3650 \
   -keyout /tmp/tc-key.pem -out /tmp/tc-cert.pem \
-  -subj "/CN=Tinycast Self-Signed" \
+  -subj "/CN=Forge Self-Signed" \
   -addext "basicConstraints=critical,CA:false" \
   -addext "keyUsage=critical,digitalSignature" \
   -addext "extendedKeyUsage=critical,codeSigning"
 
 # Bundle it as a .p12 (the non-empty password keeps `security import` happy).
 openssl pkcs12 -export -inkey /tmp/tc-key.pem -in /tmp/tc-cert.pem \
-  -name "Tinycast Self-Signed" -out /tmp/tc.p12 -passout pass:tinycast
+  -name "Forge Self-Signed" -out /tmp/tc.p12 -passout pass:forge
 
 # Import into the login keychain so codesign can use it without prompting.
 security import /tmp/tc.p12 -k ~/Library/Keychains/login.keychain-db \
-  -P tinycast -A -T /usr/bin/codesign
+  -P forge -A -T /usr/bin/codesign
 
 rm -f /tmp/tc-key.pem /tmp/tc-cert.pem /tmp/tc.p12
 ```
@@ -40,7 +40,7 @@ rm -f /tmp/tc-key.pem /tmp/tc-cert.pem /tmp/tc.p12
 Verify it's there:
 
 ```sh
-security find-identity -p codesigning | grep "Tinycast Self-Signed"
+security find-identity -p codesigning | grep "Forge Self-Signed"
 ```
 
 Now local builds (Xcode, VS Code F5, `xcodebuild`) sign with it, and you grant Accessibility once.
@@ -66,12 +66,12 @@ Then set the two secrets on the repo (via `gh`, authed as the repo owner, or pas
 UI under **Settings → Secrets and variables → Actions**):
 
 ```sh
-gh secret set SIGNING_P12_BASE64   --repo abue-ammar/tinycast < /tmp/signing.p12.base64
-gh secret set SIGNING_P12_PASSWORD --repo abue-ammar/tinycast --body "$P12_PASSWORD"
+gh secret set SIGNING_P12_BASE64   --repo Varun-Chinthoju/forge < /tmp/signing.p12.base64
+gh secret set SIGNING_P12_PASSWORD --repo Varun-Chinthoju/forge --body "$P12_PASSWORD"
 rm -f /tmp/signing.p12.base64   # holds your private key — delete it
 ```
 
-If you ever lose the secrets, just re-run this section — as long as the `Tinycast Self-Signed`
+If you ever lose the secrets, just re-run this section — as long as the `Forge Self-Signed`
 identity is still in your keychain, the exported identity is the same, so users are unaffected. If you
 lose the identity entirely, recreate it (step 1) and re-do this; existing users will re-grant
 Accessibility once on their next update, then it's stable again.
@@ -80,9 +80,9 @@ Accessibility once on their next update, then it's stable again.
 
 **Release only**, on both targets: `ENABLE_HARDENED_RUNTIME: YES`, which notarization requires. Debug
 must stay without it — hardened runtime turns on library validation, and Xcode's
-`Tinycast Dev.debug.dylib` is refused at launch because a self-signed identity carries no Team ID for
+`Forge Dev.debug.dylib` is refused at launch because a self-signed identity carries no Team ID for
 the loader to match. The flag is not part of the designated requirement, so turning it on costs no
-Accessibility grant. Two exceptions in `Tinycast/Tinycast.entitlements` earn their place:
+Accessibility grant. Two exceptions in `Forge/Forge.entitlements` earn their place:
 
 | Entitlement | Without it |
 | --- | --- |
@@ -99,8 +99,8 @@ common notarization rejection there is.
 
 ## The Developer ID migration
 
-`BundleSignature` already accepts a bundle signed by the Tinycast team under Apple's Developer ID
-chain, even though releases are still signed with `Tinycast Self-Signed`. That is deliberate and
+`BundleSignature` already accepts a bundle signed by the Forge team under Apple's Developer ID
+chain, even though releases are still signed with `Forge Self-Signed`. That is deliberate and
 staged: the updater compares signatures before it installs, so the code that trusts the new identity
 has to reach users *before* the first build carrying it. Until the switch it also accepts the running
 app's own leaf, which is the only thing a copy installed earlier knows how to check.
@@ -112,10 +112,10 @@ Mac would refuse a bundle the chain already proves is ours.
 
 **The Developer ID identity stays a CI-only fact.** When the switch happens it is named on the
 release workflow's `xcodebuild` line and nowhere else: `project.yml` keeps signing with
-`Tinycast Self-Signed`, so a contributor keeps building with the one they created in §1 — same name,
+`Forge Self-Signed`, so a contributor keeps building with the one they created in §1 — same name,
 their own key, never shared. Nothing about local development changes.
 
-**Keep `Tinycast Self-Signed` in the login keychain after the switch.** It is the only way to ship a
+**Keep `Forge Self-Signed` in the login keychain after the switch.** It is the only way to ship a
 build that a copy predating the migration could still install.
 
 ## Quarantine (separate from signing)

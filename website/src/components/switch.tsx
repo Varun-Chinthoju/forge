@@ -20,7 +20,7 @@ export function Switch() {
             src={asset("import.png")}
             width={1800}
             height={1192}
-            alt="Tinycast's Backup settings pane with a Raycast export selected and a list of categories to import."
+            alt="Forge's Backup settings pane with a Raycast export selected and a list of categories to import."
             className="block h-auto w-full"
           />
         </div>

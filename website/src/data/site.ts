@@ -2,20 +2,19 @@
 // the site. Update these in one place rather than hunting through components.
 
 export const site = {
-  name: "Tinycast",
+  name: "Forge",
   tagline: "The essentials, without the bloat.",
-  repo: "https://github.com/abue-ammar/tinycast",
-  url: "https://abue-ammar.github.io/tinycast",
+  repo: "https://github.com/Varun-Chinthoju/forge",
+  url: "https://varun-chinthoju.github.io/forge",
   // Shown only until the build-time release lookup resolves, and if it fails.
   fallbackVersion: "v0.9.7",
   platform: "macOS 26+",
   license: "AGPL-3.0",
-  licenseUrl: "https://github.com/abue-ammar/tinycast/blob/main/LICENSE",
+  licenseUrl: "https://github.com/Varun-Chinthoju/forge/blob/main/LICENSE",
   community: {
-    discord: "https://discord.gg/v2Eeb4QQy3",
+    github: "https://github.com/Varun-Chinthoju/forge",
   },
-  support:
-    "https://buy.polar.sh/polar_cl_NDVFC20DKQpLcNawsh97QzbARBXD3WNn8v35R0mbJmT",
+  support: "https://github.com/Varun-Chinthoju/forge",
 } as const;
 
 // The hero, in as few words as possible — headline plus one punchy line.
@@ -36,43 +35,43 @@ export const nav = [
 // Homebrew install channels. Each is a separate app that runs side by side,
 // with its own settings, permissions and login item. Descriptions follow
 // docs/install.md.
-export const brewTrustCommand = "brew trust --tap abue-ammar/tinycast";
+export const brewTrustCommand = "brew install --cask forge";
 
 export const channels = [
   {
     id: "stable",
     label: "Stable",
-    cask: "tinycast",
+    cask: "forge",
     description:
       "Recommended. The smaller build, for Apple silicon on macOS 26.",
   },
   {
     id: "universal",
     label: "Intel",
-    cask: "tinycast-universal",
+    cask: "forge-universal",
     description:
       "The universal build, for Intel Macs on macOS 26. Runs on Apple silicon too.",
   },
   {
     id: "beta",
     label: "Beta",
-    cask: "tinycast@beta",
+    cask: "forge@beta",
     description:
-      "Installs Tinycast Beta, with its own settings, right beside stable.",
+      "Installs Forge Beta, with its own settings, right beside stable.",
   },
   {
     id: "sequoia",
     label: "Sequoia",
-    cask: "tinycast-sequoia",
+    cask: "forge-sequoia",
     description: "For macOS 15 Sequoia. New features reach macOS 26 first.",
   },
 ] as const;
 
 export function brewInstallCommand(cask: string): string {
-  return `brew install --cask abue-ammar/tinycast/${cask}`;
+  return `brew install --cask ${cask}`;
 }
 
 // Only for a direct DMG download. Homebrew clears quarantine on every install
 // and update, so the Homebrew path needs no manual step at all.
 export const quarantineCommand =
-  'xattr -dr com.apple.quarantine "/Applications/Tinycast.app"';
+  'xattr -dr com.apple.quarantine "/Applications/Forge.app"';

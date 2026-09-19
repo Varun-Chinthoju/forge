@@ -1,6 +1,6 @@
 ---
 title: What works
-description: What Tinycast supports from the Raycast API, how well it works in practice, and the known gaps.
+description: What Forge supports from the Raycast API, how well it works in practice, and the known gaps.
 ---
 
 ## How well it works
@@ -30,7 +30,7 @@ published extensions work too.
 **Signing in with OAuth.** `OAuth.PKCEClient` works with all three of Raycast's redirect methods.
 Tokens are kept in your login Keychain, one set per extension, and removed when you uninstall it.
 
-To catch the redirect, Tinycast registers the `raycast://` link type. If Raycast is also installed,
+To catch the redirect, Forge registers the `raycast://` link type. If Raycast is also installed,
 macOS picks which app gets those links. A sign-in that never comes back gives up after five minutes.
 
 **Node built-ins.** `path`, `fs` and `fs/promises`, `os`, `child_process`, `crypto`, `zlib`,
@@ -46,7 +46,7 @@ node-fetch work. Streams are the real thing, so pipelines like `fetch` → file 
 the palette closed. A `no-view` command with an `interval` can refresh on a schedule; see
 [Background refresh](/docs/extensions/customising#background-refresh).
 
-**`raycast://` links** stay inside Tinycast. A link to an installed extension command runs that
+**`raycast://` links** stay inside Forge. A link to an installed extension command runs that
 command, and anything else reopens the palette. Passing them on would launch Raycast itself.
 
 ## Not supported yet

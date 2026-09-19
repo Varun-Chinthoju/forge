@@ -1,4 +1,3 @@
-import { Heart } from "lucide-react";
 import { site } from "../data/site";
 import { Button } from "./ui/button";
 import { GitHubLogo, Logo } from "./ui/icon";
@@ -26,16 +25,16 @@ export function Support() {
         <GlowingMark />
       </div>
       <h2 className="mx-auto mt-14 max-w-2xl text-closing">
-        Keep Tinycast free.
+        Keep Forge free.
       </h2>
       <p className="mx-auto mt-4 max-w-lg text-pretty text-body-lg text-fg-muted">
-        Tinycast is free and open source, with no account and no telemetry. If
+        Forge is free and open source, with no account and no telemetry. If
         it has earned a place on your Mac, your support keeps development going.
       </p>
       <div className="mt-8 flex flex-wrap justify-center gap-3">
-        <Button href={site.support} size="lg">
-          <Heart size={16} />
-          Support development
+        <Button href={site.repo} size="lg">
+          <GitHubLogo size={16} />
+          Support Forge on GitHub
         </Button>
         <Button href={site.repo} variant="ghost" size="lg">
           <GitHubLogo size={16} />

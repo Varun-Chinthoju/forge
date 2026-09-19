@@ -130,7 +130,7 @@ invariant true for every frame in the pass.
 that is `AXStandardWindow`, not minimized, not natively fullscreen, reports geometry, and is
 positionable — a stricter filter than the mover's, because a Save sheet must never become an entry.
 Candidates come from `AppLauncher.quitAllTargets()`'s rule, excluded **by pid** rather than by
-activation policy, since opening About flips Tinycast itself to `.regular`.
+activation policy, since opening About flips Forge itself to `.regular`.
 
 Only Accessibility is needed: `AXPosition` and `AXSize` are AX attributes. Screen Recording gates
 window *titles*, which nothing here reads.
